@@ -23,13 +23,21 @@ const UserMenu: React.FC<UserMenuProps> = ({
     setIsOpen((value) => !value);
   }, []);
 
+  const onReport = useCallback(() => {
+    if (!currentUser) {
+      return LoginModal.onOpen();
+    }
+
+    //Open Report Modal
+  },  [currentUser, LoginModal]);
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={() => {onReport}}
           className=" hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-          User
+          {currentUser?.name}
         </div>
         <div
           onClick={toggleOpen}
