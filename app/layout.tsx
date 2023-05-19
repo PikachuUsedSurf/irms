@@ -7,6 +7,7 @@ import ToasterProvider from "./providers/ToasterProvider";
 import React from "react";
 import LoginModal from "@/app/components/modals/LoginModal";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import ReportModal from "./components/modals/ReportModal";
 
 export const metadata = {
   title: "Report Management System",
@@ -26,6 +27,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
+          <ReportModal/>
           <LoginModal />
           <RegisterModal />
           <Navbar currentUser={currentUser} />
