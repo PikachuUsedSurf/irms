@@ -6,6 +6,7 @@ import Heading from '../Heading';
 import { categories } from '../navbar/Categories';
 import { TbReportAnalytics } from 'react-icons/tb';
 import CategoryInput from '../Inputs/CategoryInput';
+import { FieldValues, useForm } from 'react-hook-form';
 
 enum STEPS {
   category = 0,
@@ -17,7 +18,7 @@ enum STEPS {
   published = 6,
 }
 
-export const category = [
+export const department = [
   {
     label: 'System Admin',
     icon: TbReportAnalytics,
@@ -40,6 +41,38 @@ const ReportModal = () => {
   const reportModal = useReportModal();
 
   const [step, setStep] = useState(STEPS.category);
+
+  const {
+    register,
+    handlesubmit,
+    setValue,
+    watch,
+    formState: {
+      errors,
+    },
+    reset
+  } = useForm<FieldValues>({
+    defaultValues: {
+      category: '',
+      location: null,
+      people: 1,
+      file: 1,
+      title: null,
+      body: '',
+      published: ''
+      
+    }
+  });
+
+  const category = watch('category');
+
+  const setCustomValue = (id: string, value: any) => {
+    setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+  }
 
   const onBack = () => {
     setStep((value) => value - 1);
@@ -68,7 +101,7 @@ const ReportModal = () => {
     <div className="flex flex-col gap-8">
       <Heading
       title="what category of report are you making?"
-      subtitle='pick a category'
+      subtitle='choose a category'
       />
       <div className='
       grid
@@ -78,12 +111,11 @@ const ReportModal = () => {
       max-h-[50vh]
       overflow-y-auto
       '>
-        {category.map((item) => (
+        {department.map((item) => (
           <div key={item.label} className='col-span-1'>
             <CategoryInput
-            
-              onclick={() => { }}
-              selected={false}
+              onClick={(category) => setCustomValue('category', category)}
+              selected={category === item.label}
               label={item.label}
               icon={item.icon}
             />
@@ -92,12 +124,14 @@ const ReportModal = () => {
       </div>
     </div>
   )
+
+
   
   return (
       <Modal
         isOpen={reportModal.isOpen}
         onClose={reportModal.onClose}
-        onSubmit={reportModal.onClose}
+        onSubmit={onNext}
         actionLabel={actionLabel}
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={step === STEPS.category ? undefined : onBack}
